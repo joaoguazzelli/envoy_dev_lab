@@ -8,7 +8,7 @@ package echo
 
 import (
 	proto "github.com/golang/protobuf/proto"
-	messages "github.com/zerospiel/xds-playground/pkg/echo_v1/messages"
+	messages "github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	echo "github.com/zerospiel/xds-playground/pkg/echo_v1"
-	echo_messages "github.com/zerospiel/xds-playground/pkg/echo_v1/messages"
+	echo "github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1"
+	echo_messages "github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
 	_ "google.golang.org/grpc/xds"

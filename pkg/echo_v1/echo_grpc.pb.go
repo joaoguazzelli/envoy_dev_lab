@@ -4,7 +4,7 @@ package echo
 
 import (
 	context "context"
-	messages "github.com/zerospiel/xds-playground/pkg/echo_v1/messages"
+	messages "github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"

@@ -1,7 +1,7 @@
 .PHONY: pb
 pb:
-	buf protoc --proto_path ./api/ --go_out=Mecho/v1/messages/messages.proto=github.com/zerospiel/xds-playground/pkg/echo_v1/messages,module=github.com/zerospiel/xds-playground:. api/echo/v1/messages/messages.proto api/echo/v1/echo.proto
-	buf protoc --proto_path ./api/ --go-grpc_out=Mecho/v1/messages/messages.proto=github.com/zerospiel/xds-playground/pkg/echo_v1/messages,module=github.com/zerospiel/xds-playground:. api/echo/v1/messages/messages.proto api/echo/v1/echo.proto
+	buf protoc --proto_path ./api/ --go_out=Mecho/v1/messages/messages.proto=github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages,module=github.com/joaoguazzelli/envoy_dev_lab:. api/echo/v1/messages/messages.proto api/echo/v1/echo.proto
+	buf protoc --proto_path ./api/ --go-grpc_out=Mecho/v1/messages/messages.proto=github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages,module=github.com/joaoguazzelli/envoy_dev_lab:. api/echo/v1/messages/messages.proto api/echo/v1/echo.proto
 
 ### kubernetes related targets
 

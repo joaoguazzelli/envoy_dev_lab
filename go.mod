@@ -1,4 +1,4 @@
-module github.com/zerospiel/xds-playground
+module github.com/joaoguazzelli/envoy_dev_lab
 
 go 1.15
 
