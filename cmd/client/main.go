@@ -5,7 +5,6 @@ import (
 	"flag"
 	"log"
 	"os"
-	"strconv"
 	"time"
 
 	echo "github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1"
@@ -48,7 +47,7 @@ func main() {
 	for {
 		p := &peer.Peer{}
 		resp, err := cl.Echo(ctx, &echo_messages.EchoRequest{
-			Msg: "hello " + strconv.Itoa(i),
+			Msg: "hello world!",
 		}, grpc.Peer(p))
 		if err != nil {
 			log.Fatalf("failed invoke Echo: %s\n", err.Error())

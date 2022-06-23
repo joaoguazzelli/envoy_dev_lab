@@ -1,7 +1,7 @@
 appName: xds-server
 image: xds-server
 tag: latest
-replicaCount: 3
+replicaCount: 1
 resources:
   limits:
     cpu: 200m

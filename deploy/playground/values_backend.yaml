@@ -1,7 +1,7 @@
 appName: backend
 image: backend
 tag: latest
-replicaCount: 3
+replicaCount: 1
 resources:
   limits:
     cpu: 50m
