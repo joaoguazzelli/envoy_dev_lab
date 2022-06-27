@@ -1,1 +1,0 @@
-{"buildTargets":["backend","deploy","frontend","pb","undeploy","xds-server"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
