@@ -20,18 +20,11 @@ import (
 	"k8s.io/client-go/tools/cache"
 )
 
-// NOTE: funcs for getting DS resources may change signature to accept
-// cluster name, this will be useful when you have multiple
-// clusters and want to balance btwn them,
-// especially that it's already implemented since grpc-go 1.31.0
-
-// those are some HardCoded values
-// it won't be used in that way on production
 const (
-	regionNameHC = "tdb_hardcoded" // i don't know in which case it may be used tbh
-	zoneNameHC   = "dataline_dc"   // this is some datacenter name
+	regionNameHC = "tdb_hardcoded"
+	zoneNameHC   = "dataline_dc"
 
-	serviceName = "backend" // some hardcoded svc name, for sake of productivity
+	serviceName = "backend"
 )
 
 type (
@@ -94,9 +87,6 @@ func (c *k8sInMemoryState) initState(epsInformer cache.SharedIndexInformer) erro
 	return nil
 }
 
-// getResources returns resources map where keys represent
-// resource names to match appropriate resource type.
-// Error may be only if there was a problem with marshaling protobuf any value.
 func getResources(svc2Eps map[string][]podEndpoint, localitiesZone2Reg map[string]string) (eds, cds, rds, lds map[string]types.Resource, err error) {
 	eds = map[string]types.Resource{}
 	cds = map[string]types.Resource{}
@@ -121,11 +111,6 @@ func getResources(svc2Eps map[string][]podEndpoint, localitiesZone2Reg map[strin
 	return
 }
 
-// getLDS creates Listener resources.
-// LDS returns Listener resources.
-// Used basically as a convenient root for
-// the gRPC client's configuration.
-// Points to the RouteConfiguration.
 func getLDS(svcRouteConfigName, svcListenerName string) (types.Resource, error) {
 	httpConnRds := &hcm.HttpConnectionManager_Rds{
 		Rds: &hcm.Rds{
@@ -157,33 +142,16 @@ func getLDS(svcRouteConfigName, svcListenerName string) (types.Resource, error) 
 		}), nil
 }
 
-// getRDS creates RouteConfiguration resource.
-// RDS returns RouteConfiguration resource.
-// Provides data used to populate the gRPC service config.
-// Points to the Cluster.
 func getRDS(clusterName, svcRouteConfigName, svcVirtualHostName, svcListenerName string) types.Resource {
 	vhost := &route.VirtualHost{
 		Name:    svcVirtualHostName,
 		Domains: []string{svcListenerName},
 		Routes: []*route.Route{{
 			Match: &route.RouteMatch{
-				// since grpc-go 1.31.0 there is possibility for requests
-				// matching based on path (prefix, full path and safe regex)
-				// and headers (check out route.HeaderMatcher)
 				PathSpecifier: &route.RouteMatch_Prefix{Prefix: ""},
-				// PathSpecifier: &route.RouteMatch_SafeRegex{},
 			},
 			Action: &route.Route_Route{Route: &route.RouteAction{
-				// singce grpc-go 1.31.0 supports weighted clusters
-				// there is a possibility to specify ClusterSpecifier
-				// with one of: Cluster or WeightedCluster (ClusterHeader still unavailable)
 
-				// cluster example
-				// ClusterSpecifier: &route.RouteAction_Cluster{
-				// 	Cluster: clusterName,
-				// }}},
-
-				// weighted cluster example
 				ClusterSpecifier: &route.RouteAction_WeightedClusters{
 					WeightedClusters: &route.WeightedCluster{
 						TotalWeight: &wrapperspb.UInt32Value{Value: uint32(100)}, // default value
@@ -205,10 +173,6 @@ func getRDS(clusterName, svcRouteConfigName, svcVirtualHostName, svcListenerName
 		})
 }
 
-// getCDS creates Cluster resource.
-// CDS returns Cluster resource. Configures things like
-// load balancing policy and load reporting.
-// Points to the ClusterLoadAssignment.
 func getCDS(clusterName, serviceName string) types.Resource {
 	return types.Resource(
 		&api.Cluster{
@@ -229,10 +193,6 @@ func getCDS(clusterName, serviceName string) types.Resource {
 		})
 }
 
-// getEDS creates ClusterLoadAssignment resource.
-// EDS returns ClusterLoadAssignment resource.
-// Configures the set of endpoints (backend servers) to
-// load balance across and may tell the client to drop requests.
 func getEDS(serviceName string, endpoints []podEndpoint, localitiesZone2Reg map[string]string) types.Resource {
 	var (
 		weights = []uint32{70, 20, 0}
@@ -272,7 +232,7 @@ func getEDS(serviceName string, endpoints []podEndpoint, localitiesZone2Reg map[
 	var localityLbEps []*ep.LocalityLbEndpoints
 	for zone, region := range localitiesZone2Reg {
 		localityLbEps = append(localityLbEps, &ep.LocalityLbEndpoints{
-			Priority: 0, // highest priority, read desc for more
+			Priority: 0,
 			LoadBalancingWeight: &wrapperspb.UInt32Value{
 				Value: sumW,
 			},

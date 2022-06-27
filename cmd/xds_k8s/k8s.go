@@ -27,10 +27,6 @@ type k8sInMemoryState struct {
 
 	mu sync.RWMutex
 
-	// svcState presents the whole k8s services with aligned endpoints
-	// type of the field can be changed to fit your own needs
-	// like k8s namespace or ports separation, matching versions of EPs
-	// this one is the most simplest example
 	svcState map[string][]podEndpoint
 }
 
@@ -46,9 +42,6 @@ func mustKubernetesClient() *kubernetes.Clientset {
 		panic(fmt.Errorf("failed get k8s cluster config: %w", err))
 	}
 
-	// formally, it can be a set of clusters
-	// check it out: https://github.com/envoyproxy/go-control-plane/blob/master/examples/dyplomat/bootstrap.go#L24
-	// in this case we use single separate k8s cluster
 	clientSet, err := kubernetes.NewForConfig(c)
 	if err != nil {
 		panic(fmt.Errorf("failed init k8s client set with cluster config: %w", err))
@@ -90,7 +83,6 @@ func (c *k8sInMemoryState) onEventProcess(obj interface{}, eventType string) {
 
 	svcName, podEndpoints := endpoints.GetObjectMeta().GetName(), extractDataFromEndpoints(endpoints)
 
-	// sanity check
 	c.mu.RLock()
 	if _, ok := c.svcState[svcName]; !ok {
 		c.mu.RUnlock()
@@ -102,10 +94,7 @@ func (c *k8sInMemoryState) onEventProcess(obj interface{}, eventType string) {
 	c.svcState[svcName] = podEndpoints
 	c.mu.Unlock()
 
-	// NOTE: in this method we can extract locality data from endpoint in some way
 	c.mu.RLock()
-	// TODO: here should be a separate method for incremental resources
-	// but envoy currently doesn't support incremental DS
 	eds, cds, rds, lds, err := getResources(c.svcState, map[string]string{zoneNameHC: regionNameHC})
 	if err != nil {
 		c.mu.RUnlock()
