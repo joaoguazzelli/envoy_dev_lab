@@ -23,6 +23,98 @@ import (
 
 var cntServers, defPort int
 
+/*
+func seedUsers(userStore UserStore) error {
+	err := createUser(userStore, "admin1", "secret", "admin")
+	if err != nil {
+		return err
+	}
+	return createUser(userStore, "user1", "secret", "user")
+}
+
+func createUser(userStore UserStore, username, password, role string) error {
+	user, err := NewUser(username, password, role)
+	if err != nil {
+		return err
+	}
+	return userStore.Save(user)
+}
+
+const (
+	secretKey     = "secret"
+	tokenDuration = 15 * time.Minute
+)
+
+const (
+	serverCertFile   = "cert/server-cert.pem"
+	serverKeyFile    = "cert/server-key.pem"
+	clientCACertFile = "cert/ca-cert.pem"
+)
+
+func loadTLSCredentials() (credentials.TransportCredentials, error) {
+	// Load certificate of the CA who signed client's certificate
+	pemClientCA, err := ioutil.ReadFile(clientCACertFile)
+	if err != nil {
+		return nil, err
+	}
+
+	certPool := x509.NewCertPool()
+	if !certPool.AppendCertsFromPEM(pemClientCA) {
+		return nil, fmt.Errorf("failed to add client CA's certificate")
+	}
+
+	// Load server's certificate and private key
+	serverCert, err := tls.LoadX509KeyPair(serverCertFile, serverKeyFile)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create the credentials and return it
+	config := &tls.Config{
+		Certificates: []tls.Certificate{serverCert},
+		ClientAuth:   tls.RequireAndVerifyClientCert,
+		ClientCAs:    certPool,
+	}
+
+	return credentials.NewTLS(config), nil
+}
+
+func accessibleRoles() map[string][]string {
+	return map[string][]string{
+		"/pkg/echo_v1": {"admin"},
+	}
+}
+
+func runGRPCServer(
+	authServer pb.AuthServiceServer,
+	jwtManager *JWTManager,
+	enableTLS bool,
+	listener net.Listener,
+) error {
+	interceptor := NewAuthInterceptor(jwtManager, accessibleRoles())
+	serverOptions := []grpc.ServerOption{
+		grpc.UnaryInterceptor(interceptor.Unary()),
+		grpc.StreamInterceptor(interceptor.Stream()),
+	}
+
+	if enableTLS {
+		tlsCredentials, err := loadTLSCredentials()
+		if err != nil {
+			return fmt.Errorf("cannot load TLS credentials: %w", err)
+		}
+
+		serverOptions = append(serverOptions, grpc.Creds(tlsCredentials))
+	}
+
+	grpcServer := grpc.NewServer(serverOptions...)
+
+	pb.RegisterAuthServiceServer(grpcServer, authServer)
+	reflection.Register(grpcServer)
+
+	log.Printf("Start GRPC server at %s, TLS = %t", listener.Addr().String(), enableTLS)
+	return grpcServer.Serve(listener)
+}
+*/
 func init() {
 	flag.IntVar(&cntServers, "servers", 1, "how many servers to start")
 	flag.IntVar(&defPort, "port", 50051, "default port to start listen server from")
@@ -49,6 +141,36 @@ func (s healthServer) Watch(in *healthpb.HealthCheckRequest, srv healthpb.Health
 }
 
 func main() {
+	/*
+		port := flag.Int("port", 0, "the server port")
+		enableTLS := flag.Bool("tls", false, "enable SSL/TLS")
+		serverType := "grpc"
+		flag.Parse()
+
+		userStore := NewInMemoryUserStore()
+		err := seedUsers(userStore)
+		if err != nil {
+			log.Fatal("cannot seed users: ", err)
+		}
+
+		jwtManager := NewJWTManager(secretKey, tokenDuration)
+		authServer := NewAuthServer(userStore, jwtManager)
+
+		address := fmt.Sprintf("0.0.0.0:%d", *port)
+		listener, err := net.Listen("tcp", address)
+		if err != nil {
+			log.Fatal("cannot start server: ", err)
+		}
+
+		if serverType == "grpc" {
+			err = runGRPCServer(authServer, jwtManager, *enableTLS, listener)
+		}
+
+		if err != nil {
+			log.Fatal("cannot start server: ", err)
+		}
+	*/
+	// ---------------------------------------------------------------------------------
 	flag.Parse()
 
 	if len(flag.Args()) > 2 {
