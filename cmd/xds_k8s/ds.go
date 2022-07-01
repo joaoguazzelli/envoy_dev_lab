@@ -9,7 +9,8 @@ import (
 	envoy_core "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
 	ep "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
 	route "github.com/envoyproxy/go-control-plane/envoy/api/v2/route"
-	jwt_authn "github.com/envoyproxy/go-control-plane/envoy/config/filter/http/jwt_authn/v2alpha"
+
+	//jwt_authn "github.com/envoyproxy/go-control-plane/envoy/config/filter/http/jwt_authn/v2alpha"
 	hcm "github.com/envoyproxy/go-control-plane/envoy/config/filter/network/http_connection_manager/v2"
 	listener "github.com/envoyproxy/go-control-plane/envoy/config/listener/v2"
 	"github.com/envoyproxy/go-control-plane/pkg/cache/types"
