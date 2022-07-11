@@ -12,6 +12,7 @@ require (
 	gitlab.com/techschool/pcbook v0.0.0-20200530140618-343f6ae8e43a
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e // indirect
+	google.golang.org/genproto v0.0.0-20200528191852-705c0b31589b
 	google.golang.org/grpc v1.33.1
 	google.golang.org/protobuf v1.25.0
 	k8s.io/api v0.19.3

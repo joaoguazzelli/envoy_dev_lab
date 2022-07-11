@@ -2,7 +2,11 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"flag"
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -14,8 +18,10 @@ import (
 
 	echo "github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1"
 	echo_messages "github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages"
+	"gitlab.com/techschool/pcbook/pb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
@@ -23,7 +29,6 @@ import (
 
 var cntServers, defPort int
 
-/*
 func seedUsers(userStore UserStore) error {
 	err := createUser(userStore, "admin1", "secret", "admin")
 	if err != nil {
@@ -114,7 +119,7 @@ func runGRPCServer(
 	log.Printf("Start GRPC server at %s, TLS = %t", listener.Addr().String(), enableTLS)
 	return grpcServer.Serve(listener)
 }
-*/
+
 func init() {
 	flag.IntVar(&cntServers, "servers", 1, "how many servers to start")
 	flag.IntVar(&defPort, "port", 50051, "default port to start listen server from")
@@ -141,35 +146,34 @@ func (s healthServer) Watch(in *healthpb.HealthCheckRequest, srv healthpb.Health
 }
 
 func main() {
-	/*
-		port := flag.Int("port", 0, "the server port")
-		enableTLS := flag.Bool("tls", false, "enable SSL/TLS")
-		serverType := "grpc"
-		flag.Parse()
+	//port := flag.Int("port", 0, "the server port")
+	enableTLS := flag.Bool("tls", false, "enable SSL/TLS")
+	serverType := "grpc"
+	flag.Parse()
 
-		userStore := NewInMemoryUserStore()
-		err := seedUsers(userStore)
-		if err != nil {
-			log.Fatal("cannot seed users: ", err)
-		}
+	userStore := NewInMemoryUserStore()
+	err := seedUsers(userStore)
+	if err != nil {
+		log.Fatal("cannot seed users: ", err)
+	}
 
-		jwtManager := NewJWTManager(secretKey, tokenDuration)
-		authServer := NewAuthServer(userStore, jwtManager)
+	jwtManager := NewJWTManager(secretKey, tokenDuration)
+	authServer := NewAuthServer(userStore, jwtManager)
 
-		address := fmt.Sprintf("0.0.0.0:%d", *port)
-		listener, err := net.Listen("tcp", address)
-		if err != nil {
-			log.Fatal("cannot start server: ", err)
-		}
+	//address := fmt.Sprintf("0.0.0.0:%d", *port)
+	address := "0.0.0.0:0"
+	listener, err := net.Listen("tcp", address)
+	if err != nil {
+		log.Fatal("cannot start server: ", err)
+	}
 
-		if serverType == "grpc" {
-			err = runGRPCServer(authServer, jwtManager, *enableTLS, listener)
-		}
+	if serverType == "grpc" {
+		err = runGRPCServer(authServer, jwtManager, *enableTLS, listener)
+	}
 
-		if err != nil {
-			log.Fatal("cannot start server: ", err)
-		}
-	*/
+	if err != nil {
+		log.Fatal("cannot start server: ", err)
+	}
 	// ---------------------------------------------------------------------------------
 	flag.Parse()
 

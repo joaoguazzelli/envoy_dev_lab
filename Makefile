@@ -1,8 +1,8 @@
 .PHONY: pb
 pb:
-	buf protoc --proto_path ./api/ --go_out=Mecho/v1/messages/messages.proto=github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages,module=github.com/joaoguazzelli/envoy_dev_lab:. api/echo/v1/messages/messages.proto api/echo/v1/echo.proto
-	buf protoc --proto_path ./api/ --go-grpc_out=Mecho/v1/messages/messages.proto=github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages,module=github.com/joaoguazzelli/envoy_dev_lab:. api/echo/v1/messages/messages.proto api/echo/v1/echo.proto
-
+	protoc --proto_path ./api/ --go_out=Mecho/v1/messages/messages.proto=github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages,module=github.com/joaoguazzelli/envoy_dev_lab:. echo/v1/messages/messages.proto echo/v1/echo.proto echo/v1/auth_service.proto
+	protoc --proto_path ./api/ --go-grpc_out=Mecho/v1/messages/messages.proto=github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1/messages,module=github.com/joaoguazzelli/envoy_dev_lab:. echo/v1/messages/messages.proto echo/v1/echo.proto echo/v1/auth_service.proto
+# 
 ### kubernetes related targets
 
 .PHONY: .common_deploy
@@ -40,4 +40,4 @@ undeploy:
 	helm uninstall xds-server
 	helm uninstall backend
 
-### kubernetes related targets
+### kubernetes related targe

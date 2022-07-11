@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package techschool.pcbook;
+package echo.v1;
 
-import "google/api/annotations.proto";
+import "echo/v1/google/api/annotations.proto";
 
-option go_package = ".;pb";
-option java_package = "com.gitlab.techschool.pcbook.pb";
-option java_multiple_files = true;
+option go_package = "github.com/joaoguazzelli/envoy_dev_lab/pkg/echo_v1;echo";
+//option java_package = "com.gitlab.techschool.pcbook.pb";
+//option java_multiple_files = true;
 
 message LoginRequest {
   string username = 1;
